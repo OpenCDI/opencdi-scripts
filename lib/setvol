@@ -1,0 +1,4 @@
+#!/bin/sh
+setvol(){
+  genargs -v `for j in $@; do echo \`dupargs $j :\`; done`
+}

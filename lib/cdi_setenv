@@ -1,0 +1,53 @@
+#!/bin/sh
+cdi_setenv(){
+  vol_args=
+  dev_args=
+  env_args=
+  con_name=${1:?cdictl: argument needed!}
+  case $con_name in
+  dom0) 
+  img_name=admin
+  vol_args="`setvol /dev/dri /dev/shm /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket /run/docker.sock`"
+  vol_args="$vol_args --mount type=volume,source=mate_config,destination=/home/duser/.config -v $HOME/Documents:/home/duser/Documents"
+  dev_args="`setdev /dev/dri /dev/shm /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /dev/input/event6 /dev/input/event7 /dev/input/event8 /dev/input/event9 /dev/input/event10 /dev/input/event11 /dev/input/event12`"
+  net_args="--network none"
+  ;;
+
+  fox) 
+  img_name=coshapp/firefox:debian-l10n-ja-10.5
+  vol_args="`setvol /dev/dri /dev/shm /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket`"
+  dev_args="`setdev /dev/snd`"
+  env_args="`genargs -e XMODIFIERS=@im=ibus GTK_IM_MODULES=ibus QT_IM_MODULES=ibus LANG=$LANG LC_ALL=$LC_ALL`"
+  net_args="--network cdi_internal"
+  ;;
+
+  bird)
+  img_name=coshapp/thunderbird:debian-l10n-ja-10.5
+  vol_args="`setvol /dev/dri /dev/shm /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket`"
+  dev_args="`setdev /dev/snd`"
+  env_args="`genargs -e XMODIFIERS=@im=ibus GTK_IM_MODULES=ibus QT_IM_MODULES=ibus LANG=$LANG LC_ALL=$LC_ALL`"
+  net_args="--network cdi_internal"
+  ;;
+
+  office) 
+  img_name=coshapp/libreoffice:debian-l10n-ja-10.5
+  vol_args="`setvol /dev/dri /dev/shm /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket`"
+  dev_args="`setdev /dev/snd`"
+  env_args="`genargs -e XMODIFIERS=@im=ibus GTK_IM_MODULES=ibus QT_IM_MODULES=ibus LANG=$LANG LC_ALL=$LC_ALL`"
+  net_args="--network cdi_internal"
+  ;;
+
+  cdi_opx) 
+  con_name=cdi_opx
+  img_name=coshapp/trafficproxy
+  vol_args="`setvol /dev/dri /dev/shm /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket`"
+  env_args="-e"
+  net_args="--network-alias=squid.cosh --network-alias=prom.cosh --network cdi_open"
+  cmd_args="squid -YC; while :; do sleep 1000000; done"
+  ;;
+
+
+
+
+  esac
+}

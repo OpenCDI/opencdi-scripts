@@ -1,0 +1,10 @@
+px_init(){
+#PX
+docker ps | grep -v \^CONT || \
+  docker run --rm --name px -dt \
+    --network m6os_external \
+    --network-alias exporter.cosh  \
+    --network-alias squid.cosh  \
+    coshapp/trafficproxy:debian-10.4 \
+    sh -c "squid -YC; while :; do sleep 1000000; done"
+}

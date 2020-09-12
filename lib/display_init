@@ -1,0 +1,4 @@
+#!/bin/sh
+display_init(){
+  xhost +local:0
+}

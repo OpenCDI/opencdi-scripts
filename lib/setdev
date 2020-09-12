@@ -1,0 +1,6 @@
+#!/bin/sh
+
+setdev(){
+  genargs --device $@
+}
+

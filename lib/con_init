@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#preinvoke_raw $core 
+#invoke_raw $core || { echo "error" >&2; exit 1;}
+#  docker exec -dt -e http_proxy=http://squid.cosh:3128 -u root ${core:-coremate} apt-get install -y pulseaudio || exit 1
+
+pkg_init(){
+  showdesc(){ echo "pkg_init CONNAME PKGNAME" >&2; exit 1;}
+  : ${1:? pkg_init: container name not specifies!} || showdesc
+  : ${2:? pkg_init: package name not specifies!} || showdesc
+
+  docker exec -dt -u root ${1} apt-get remove -y $2 || exit 1
+  docker exec -dt -u root ${1} apt-get install -y $2 || exit 1
+}

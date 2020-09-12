@@ -1,0 +1,6 @@
+#!/bin/sh
+## duplicate argument
+dupargs(){
+  : ${1:?dupargs: argument needed!}
+  echo ${1}${2}${1}
+}

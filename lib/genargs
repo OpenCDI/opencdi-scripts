@@ -1,0 +1,12 @@
+#!/bin/sh
+## set arguments with opts
+genargs(){
+  genargs_returnopt=
+  : ${1:?genargs: argument needed!}
+  genargs_targetopt=$1
+  shift 1
+
+  : ${1:?genargs: at least two argument needed!}
+  for i in $@ ; do genargs_returnopt="$genargs_returnopt $genargs_targetopt $i"; done
+  echo $genargs_returnopt 
+}

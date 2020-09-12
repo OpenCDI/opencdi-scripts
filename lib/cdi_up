@@ -1,0 +1,6 @@
+#!/bin/sh
+cdi_up(){
+  cdi_network_launch
+  for i in dom0 $@ cdi_opx; do cdi_launch $i; done  
+  docker network connect cdi_internal cdi_opx
+}

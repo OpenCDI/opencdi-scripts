@@ -1,0 +1,9 @@
+# MANIFEST
+# cdictl
+
+SHELIB_MODULE_NAME=cdictl
+SHELIB_MODULE_VERSION=0.0.1
+SHELIB_MODULE_DESC="CDI control command"
+MODULE_AUTHER_NAME="Okadarien Saru"
+MODULE_AUTHER_EMAIL="okadas@dev.sysnk.net"
+MODULE_REPO_BASE="https://github.com/okadash/cdictl"
