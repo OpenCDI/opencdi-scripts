@@ -23,13 +23,14 @@ parseargs(){
       pa_init ;;
     down) 
     #stop cdi stack
+      shift
       cdi_down ${1:+$@} ${1:-fox bird office}; execute(){ pkill -9 X;} ;;
     *) showhelp ;;
   esac
 }
 
 execute(){
-  startx "xhost +local:0; docker exec -it -u duser \
+  exec docker exec -it -u duser \
     -e SHELL=/bin/bash \
     -e DISPLAY=:0 \
     -e LANG=$LANG \
@@ -37,11 +38,11 @@ execute(){
     -e XMODIFIERS=@im=ibus \
     -e GTK_IM_MODULE=ibus \
     -e QT_IM_MODULE=ibus \
-    ${core:-dom0} mate-session "
+    ${core:-dom0} mate-session 
 #    -e http_proxy=http://squid.cosh:3128 \
 #    -e https_proxy=http://squid.cosh:3128 \
 
-  docker stop ${core:-dom0}
+#  docker stop ${core:-dom0}
 }
 
 }

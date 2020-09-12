@@ -10,5 +10,5 @@ cdi_launch(){
 }
 
 cdi_remove(){
-  docker rm $i &
+  docker stop $1 &
 }
