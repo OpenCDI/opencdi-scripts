@@ -1,0 +1,5 @@
+xhost +local:0
+
+export cdi_core=fox
+cdictl up
+exec cdictl down
