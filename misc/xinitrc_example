@@ -1,5 +1,6 @@
 xhost +local:0
 
 export cdi_core=fox
+export FROM_XINIT=true
 cdictl up
 exec cdictl down

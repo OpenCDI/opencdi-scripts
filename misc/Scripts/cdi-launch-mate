@@ -1,0 +1,7 @@
+#!/bin/sh -x
+xhost +local:0
+
+#export core=${1:-mate}
+
+cdictl up
+cdictl down
