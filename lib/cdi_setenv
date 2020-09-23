@@ -13,6 +13,14 @@ cdi_setenv(){
   net_args="--network none"
   ;;
 
+  gnome)
+  img_name=coshapp/core:gnome-debian-10.5
+  vol_args="`setvol /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket /run/docker.sock`"
+  vol_args="$vol_args --mount type=volume,source=mate_config,destination=/home/duser/.config -v $HOME/Documents:/home/duser/Documents"
+  dev_args="`setdev /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /dev/input/event6 /dev/input/event7 /dev/input/event8 /dev/input/event9 /dev/input/event10 /dev/input/event11 /dev/input/event12`"
+  net_args="--network none"
+  ;;
+
   fox) 
   img_name=coshapp/firefox:debian-l10n-ja-10.5
   vol_args="`setvol /dev/dri /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket`"

@@ -4,7 +4,7 @@ cdi_launch(){
   dev_args=
   env_args=
   cdi_setenv ${1:?cdi_launch: argument needed!};
-  docker run --rm --name ${con_name:?container name not specified!} -dt \
+  docker run -h ${1:-null}.cosh --rm --name ${con_name:?container name not specified!} -dt \
     $vol_args $dev_args $env_args $net_args ${img_name:?image name not specified!} sh -c "${cmd_args:-while :; do sleep 1000000; done}"
 
 }
