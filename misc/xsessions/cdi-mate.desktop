@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name[en_GB]=CDI Mate
+Name[ja]=CDI Mate
+Name=CDI Mate
+Comment[en_GB]=This session logs you into CDI Mate 
+Comment[ja]=このセッションで CDI Mate にログインします
+Comment=This session logs you into CDI
+Exec=/usr/local/bin/cdi-launch
+TryExec=/usr/local/bin/cdi-launch
+Type=Application
+DesktopNames=CDI-Mate;CDI;
