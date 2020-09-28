@@ -5,9 +5,9 @@ cdi_chknetwork(){
 }
 
 cdi_network_launch(){
-  cdi_chknetwork cdi_internal || docker network create --subnet=10.110.101.0/24 cdi_internal
-  cdi_chknetwork cdi_open || docker network create --subnet=10.111.101.0/24 cdi_open
-  cdi_chknetwork cdi_system || docker network create --subnet=10.111.111.0/24 cdi_system
+  cdi_chknetwork cdi_internal || docker network create --subnet=10.10.10.0/24 --internal cdi_internal
+  cdi_chknetwork cdi_open || docker network create --subnet=10.111.111.0/24 --attachable cdi_open
+  cdi_chknetwork cdi_system || docker network create --subnet=10.11.11.0/24 cdi_system
 }
 
 cdi_network_remove(){
