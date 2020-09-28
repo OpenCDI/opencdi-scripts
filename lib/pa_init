@@ -1,5 +1,5 @@
 #!/bin/sh
 pa_init(){
   pactl load-module module-native-protocol-unix auth-anonymous=1 socket=${pa_socket:?pa_socket path not defined!}
-  docker exec -dt -u duser dom0 pulseaudio --start
+  pulseaudio --start
 }

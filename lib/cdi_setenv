@@ -6,17 +6,33 @@ cdi_setenv(){
   con_name=${1:?cdictl: argument needed!}
   case $con_name in
   dom0) 
-  img_name=admin
-  vol_args="`setvol /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket /run/docker.sock`"
+  img_name=admin${CDI_ROOTLESS:+-rootless}
+  #vol_args="`setvol /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket /run/docker.sock`"
+  vol_args="`setvol /dev/dri /dev/shm /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket /run/docker.sock` ${CDI_RIND:+ --privileged} ${CDI_ROOTLESS:+-v /run/user/1000/docker.sock:/run/docker.sock}" #rootless
+  vol_args="$vol_args --mount type=volume,source=mate_config,destination=/home/duser/.config -v $HOME/Documents:/home/duser/Documents -v $HOME/.shef:/home/duser/.shef ${CDI_RIND:+ --volumes-from dom1 -v /run/user/1000/docker.sock}"
+  test -z "$CDI_ROOTLESS" && dev_args="`setdev /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /dev/input/event6 /dev/input/event7 /dev/input/event8 /dev/input/event9 /dev/input/event10 /dev/input/event11 /dev/input/event12`" || dev_args="`setdev /dev/dri`" # rootless
+  net_args="--network cdi_internal --network-alias dom0.cosh --ip 10.10.10.10"
+  ;;
+
+  dom1)
+  img_name=admin-rootless
+  vol_args="`setvol /dev/dri /dev/shm /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket` --privileged" #rind
+  vol_args="$vol_args --mount type=volume,source=mate_config,destination=/home/duser/.config --mount type=volume,source=rootless_data,destination=/home/duser/.local/share/docker"
+  net_args="--network cdi_internal --network-alias dom1.cosh --ip 10.10.10.11"
+  ;;
+
+  gnome)
+  img_name=coshapp/core:gnome-debian-10.5
+  vol_args="`setvol /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /run/docker.sock `"
   vol_args="$vol_args --mount type=volume,source=mate_config,destination=/home/duser/.config -v $HOME/Documents:/home/duser/Documents"
   dev_args="`setdev /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /dev/input/event6 /dev/input/event7 /dev/input/event8 /dev/input/event9 /dev/input/event10 /dev/input/event11 /dev/input/event12`"
   net_args="--network none"
   ;;
 
-  gnome)
-  img_name=coshapp/core:gnome-debian-10.5
+  archlinux) 
+  img_name=coshapp/firefox:archlinux-l10n-ja-latest
   vol_args="`setvol /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket /run/docker.sock`"
-  vol_args="$vol_args --mount type=volume,source=mate_config,destination=/home/duser/.config -v $HOME/Documents:/home/duser/Documents"
+  vol_args="$vol_args --mount type=volume,source=mate_config,destination=/home/auser/.config -v $HOME/Documents:/home/auser/Documents"
   dev_args="`setdev /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /dev/input/event6 /dev/input/event7 /dev/input/event8 /dev/input/event9 /dev/input/event10 /dev/input/event11 /dev/input/event12`"
   net_args="--network none"
   ;;

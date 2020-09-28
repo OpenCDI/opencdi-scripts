@@ -1,0 +1,6 @@
+#!/bin/sh
+cdi_pa_init(){
+  test -S "$pa_socket" || throw @cdictl/cdi_pa_init: $pa_socket is not a pulseaudio socket
+  docker exec -dt -u root ${cdi_core:-dom0} chown ${cdi_user:-duser} /home/${cdi_user:-duser}/.pulse_socket
+  docker exec -dt -u ${cdi_user:-duser} ${cdi_core:-dom0} pulseaudio --start
+}

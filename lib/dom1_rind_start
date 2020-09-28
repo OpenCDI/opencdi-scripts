@@ -1,0 +1,10 @@
+#!/bin/sh
+# initialize Dom1 container as rootless in docker
+dom1_rind_start(){
+  docker network connect --ip 10.11.11.11 dom1 cdi_system
+  docker network connect --ip 10.111.111.10 dom1 cdi_open
+  {
+    sleep 5;
+    docker exec -dt dom1 dockerd-rootless.sh --experimental --host ${CDI_RIND_HOST:?dom1_rind_start: CDI_RIND_HOST not set!} --storage-driver=btrfs
+  } &
+}
