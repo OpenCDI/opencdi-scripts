@@ -1,0 +1,14 @@
+#!/bin/sh -x
+xhost +local:0
+
+CDI_WITH_PA=
+
+CDI_DISPLAY=${DISPLAY:?DISPLAY not set}
+
+export CDI_CORE_SESSION=mate-session
+export CDI_CORE_IMG=coshapp/core:gentoo
+export CDI_XIM=ibus
+export CDI_USER=guser
+export CDI_DISPLAY RIND_HOST
+
+cdictl up

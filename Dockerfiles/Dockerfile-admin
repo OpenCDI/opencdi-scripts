@@ -3,9 +3,11 @@ FROM coshapp/admin:debian-l10n-ja-10.5
 USER root
 RUN usermod -aG sudo duser
 RUN echo 'duser ALL=(ALL) NOPASSWD: /usr/bin/docker *' | tee -a /etc/sudoers
+RUN echo '127.0.0.2 dom0.cosh' >> /etc/hosts
 RUN apt-get install -y vim git
+
 USER duser 
-RUN sudo docker help || exit 1
+RUN sudo docker help version || exit 1
 WORKDIR /home/duser
 
 RUN mkdir -p local/shef

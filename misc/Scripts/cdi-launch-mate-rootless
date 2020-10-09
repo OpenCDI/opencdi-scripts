@@ -1,0 +1,10 @@
+#!/bin/sh -x
+xhost +local:0
+
+#export core=${1:-mate}
+export CDI_ROOTLESS=1
+export CDI_DISPLAY=:0
+PATH=$HOME/bin:$PATH:/sbin
+
+cdictl up
+#cdictl down

@@ -2,6 +2,17 @@
 xhost +local:0
 
 #export core=${1:-mate}
+#export ROOTLESS=1
+#SUDOING=1
+
+CDI_RIND=1
+CDI_WITH_PA=1
+
+CDI_DISPLAY=${DISPLAY:?DISPLAY not set}
+#CDI_DOCKER_ADMIN=dokuren
+RIND_HOST=unix:///run/user/1000/cosh/docker.sock
+
+export CDI_RIND CDI_DISPLAY RIND_HOST
 
 cdictl up
-cdictl down
+#cdictl down

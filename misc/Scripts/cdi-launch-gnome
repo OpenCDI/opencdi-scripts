@@ -1,0 +1,10 @@
+#!/bin/sh -x
+# Now buggy for session connection
+
+xhost +local:0
+
+export core=gnome
+export core_session=gnome-session-classic
+
+cdictl up
+cdictl down

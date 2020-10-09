@@ -1,0 +1,11 @@
+#!/bin/sh -x
+# Now buggy for session connection
+
+xhost +local:0
+
+export CDI_CORE_IMG=coshapp/core:archlinux-latest
+export CDI_CORE_SESSION=mate-session
+export CDI_USER=auser
+
+cdictl up
+cdictl down
