@@ -1,0 +1,15 @@
+#!/bin/sh
+pod_session_exec(){
+  EXEC=1 pudo docker exec -i ${FROM_XINIT:+-t} -u ${CDI_USER:-duser} \
+    -e SHELL=/bin/bash \
+    -e LANG=$LANG \
+    -e LC_ALL=$LANG \
+    ${CDI_DISPLAY:+ -e DISPLAY=$CDI_DISPLAY} \
+    ${CDI_XIM:+${CDI_XIM:+ -e XMODIFIERS=@im=$CDI_XIM -e GTK_IM_MODULE=$CDI_XIM -e QT_IM_MODULE=$CDI_XIM}} \
+    ${XDG_RUNTIME_DIR:+-e XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR} \
+    ${CDI_HTTP_PROXY:+ -e http_proxy=$CDI_HTTP_PROXY } \
+    ${CDI_HTTPS_PROXY:+ -e https_proxy=$CDI_HTTP_PROXY } \
+    ${RIND_HOST:+ -e DOCKER_HOST=$RIND_HOST } \
+    ${CDI_CORE} ${CDI_CORE_SESSION:-mate-session}
+    #${CDI_RIND:+ -e DOCKER_HOST="$CDI_RIND_HOST"} \
+}

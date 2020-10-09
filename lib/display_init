@@ -1,4 +1,4 @@
 #!/bin/sh
 display_init(){
-  xhost +local:0
+  xhost +local:${CDI_DISPLAY:?@cdictl/display_init: CDI_DISPLAY not set!}
 }

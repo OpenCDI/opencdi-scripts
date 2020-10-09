@@ -1,18 +1,13 @@
 #!/bin/sh
 
-cdi_chknetwork(){
-  docker network ls | grep ${1:?cdi_chknetwork: argument needed!} > /dev/null && return 0 || return 1
-}
-
 cdi_network_launch(){
-  cdi_chknetwork cdi_internal || docker network create --subnet=10.10.10.0/24 --internal cdi_internal
-  cdi_chknetwork cdi_open || docker network create --subnet=10.111.111.0/24 --attachable cdi_open
-  cdi_chknetwork cdi_system || docker network create --subnet=10.11.11.0/24 cdi_system
+  network_exist cdi_internal || INTERNAL=1 network_create 10.10.10.0/24 cdi_internal
+  network_exist cdi_open || ATTACHABLE=1 network_create 10.111.111.0/24 cdi_open
+  network_exist cdi_system || network_create 10.11.11.0/24 cdi_system
 }
 
 cdi_network_remove(){
-  cdi_chknetwork cdi_internal && docker network remove cdi_internal
-  cdi_chknetwork cdi_open && docker network remove cdi_open
-  cdi_chknetwork cdi_system && docker network remove cdi_system
-
+  for i in cdi_internal cdi_open cdi_system; do
+    network_remove $i
+  done
 }

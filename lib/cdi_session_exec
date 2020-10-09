@@ -1,0 +1,5 @@
+#!/bin/sh
+cdi_session_exec(){
+  test -z "${CDI_DISPLAY}" && return 0
+  pod_session_exec
+}

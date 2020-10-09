@@ -1,0 +1,9 @@
+#!/bin/sh
+
+network_create(){
+  pudo docker network create \
+    --subnet=${1:?@cdictl/docker/atomic_create_nw: subnet not specified!} \
+    ${INTERNAL:+--internal} \
+    ${ATTACHABLE:+--attachable} \
+    ${2:?@cdictl/docker/atomic_create_nw: network name not specified!}
+}

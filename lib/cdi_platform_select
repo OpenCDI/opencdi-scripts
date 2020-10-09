@@ -1,0 +1,5 @@
+#!/bin/sh
+cdi_platform_select(){
+  CDI_PLATFORM=${1:?@cdictl/cdi_platform_select: -p option needs an argument!}
+  require +$CDI_PLATFORM
+}

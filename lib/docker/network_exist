@@ -1,0 +1,7 @@
+#!/bin/sh
+
+network_exist(){
+  pudo docker network ls | grep ${1:?@cdictl/docker/atomic_chknetwork: argument needed!} > /dev/null && return 0 || return 1
+}
+
+

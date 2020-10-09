@@ -1,0 +1,10 @@
+#!/bin/sh
+pod_launch(){
+  vol_args=
+  dev_args=
+  env_args=
+  sanitize "$cmd_args"
+  setenv ${1:?pod_launch: argument needed!};
+  ${SUDOING:+sudo -u ${CDI_DOCKER_ADMIN:-root}} docker run -h ${1:-null}.cosh --rm --name ${con_name:?container name not specified!} -dt \
+    $vol_args $dev_args $env_args $net_args ${img_name:?image name not specified!} sh -c "${cmd_args:+$cmd_args;} while :; do sleep 1000000; done"
+}

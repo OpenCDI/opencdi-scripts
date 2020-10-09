@@ -1,0 +1,80 @@
+#!/bin/sh
+setenv(){
+  vol_args=
+  dev_args=
+  env_args=
+  con_name=${1:?@cdictl/setenv: argument needed!}
+  : ${CDI_USER:?@cdictl/setenv: CDI_USER not set!}
+  case $1 in
+  dom0) 
+  img_name="${CDI_CORE_IMG:?@cdictl/setenv: CDI_CORE_IMG not set!}"
+  vol_args="`setvol /dev/dri /dev/shm /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /tmp/.ICE-unix /run/dbus/system_bus_socket`" #plain CDI
+  test ! -z "$CDI_ROOTLESS" && vol_args="`setvol /dev/dri /dev/shm /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /tmp/.X11-unix /tmp/.ICE-unix /run/dbus/system_bus_socket` ${CDI_ROOTLESS:+-v /run/user/1000/docker.sock:/run/docker.sock}" #rootless
+  test -z "${CDI_RIND}" && test -z "${CDI_ROOTLESS}" && vol_args="$vol_args -v /run/docker.sock:/run/docker.sock --privileged" #plain dom0
+  vol_args="$vol_args --mount type=volume,source=mate_config,destination=/home/$CDI_USER/.config -v $HOME/Documents:/home/$CDI_USER/Documents -v $HOME/.shef:/home/$CDI_USER/.shef ${CDI_RIND:+ --mount type=volume,source=xdom_shared,destination=/run/user/1000/cosh -e DOCKER_HOST=unix:///run/user/1000/cosh/docker.sock}" ## additional bind-mount
+
+  test -z "$CDI_ROOTLESS" && dev_args="`setdev /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /dev/input/event6 /dev/input/event7 /dev/input/event8 /dev/input/event9 /dev/input/event10 /dev/input/event11 /dev/input/event12`" || dev_args="`setdev /dev/dri /dev/snd`" #rootless
+  net_args="--network cdi_internal --network-alias dom0.cosh --ip 10.10.10.10"
+  ;;
+
+  dom1) #RIND dom1 container
+  img_name="${CDI_CORE_IMG:?@cdictl/setenv: CDI_CORE_IMG not set!}${CDI_RIND:+-rootless}"
+  vol_args="`setvol /dev/dri /dev/shm /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket` --privileged" #rind
+  vol_args="$vol_args --mount type=volume,source=rootless_data,destination=/home/$CDI_USER/.local/share/docker --mount type=volume,source=xdom_shared,destination=/run/user/1000/cosh -e DOCKER_HOST=unix:///run/user/1000/cosh/docker.sock -v $HOME/.shef:/home/$CDI_USER/.shef"
+  dev_args="`setdev /dev/dri`" # RIND
+  net_args="--network cdi_internal --network-alias dom1.cosh --ip 10.10.10.11"
+  ;;
+
+  gnome)
+  img_name="$COSH_APP_PREFIX/core:gnome-debian-10.5"
+  vol_args="`setvol /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /run/docker.sock `"
+  vol_args="$vol_args --mount type=volume,source=mate_config,destination=/home/$CDI_USER/.config -v $HOME/Documents:/home/$CDI_USER/Documents"
+  dev_args="`setdev /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /dev/input/event6 /dev/input/event7 /dev/input/event8 /dev/input/event9 /dev/input/event10 /dev/input/event11 /dev/input/event12`"
+  net_args="--network none"
+  ;;
+
+  archlinux) 
+  img_name="$COSH_APP_PREFIX/firefox:archlinux-l10n-ja-latest"
+  vol_args="`setvol /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket /run/docker.sock`"
+  vol_args="$vol_args --mount type=volume,source=mate_config,destination=/home/auser/.config -v $HOME/Documents:/home/auser/Documents"
+  dev_args="`setdev /dev/dri /dev/input /dev/drm_dp_aux0 /dev/drm_dp_aux1 /dev/drm_dp_aux2 /dev/snd /dev/input/event6 /dev/input/event7 /dev/input/event8 /dev/input/event9 /dev/input/event10 /dev/input/event11 /dev/input/event12`"
+  net_args="--network none"
+  ;;
+
+  fox) 
+  img_name="$COSH_APP_PREFIX/firefox:debian-l10n-ja-10.5"
+  vol_args="`setvol /dev/dri /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket`"
+  dev_args="`setdev /dev/snd`"
+  env_args="`genargs -e XMODIFIERS=@im=ibus GTK_IM_MODULES=ibus QT_IM_MODULES=ibus LANG=$LANG LC_ALL=$LC_ALL`"
+  net_args="--network cdi_internal"
+  ;;
+
+  bird)
+  img_name="$COSH_APP_PREFIX/thunderbird:debian-l10n-ja-10.5"
+  vol_args="`setvol /dev/dri /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket`"
+  dev_args="`setdev /dev/snd`"
+  env_args="`genargs -e XMODIFIERS=@im=ibus GTK_IM_MODULES=ibus QT_IM_MODULES=ibus LANG=$LANG LC_ALL=$LC_ALL`"
+  net_args="--network cdi_internal"
+  ;;
+
+  office) 
+  img_name="$COSH_APP_PREFIX/libreoffice:debian-l10n-ja-10.5"
+  vol_args="`setvol /dev/dri /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket`"
+  dev_args="`setdev /dev/snd`"
+  env_args="`genargs -e XMODIFIERS=@im=ibus GTK_IM_MODULES=ibus QT_IM_MODULES=ibus LANG=$LANG LC_ALL=$LC_ALL`"
+  net_args="--network cdi_internal"
+  ;;
+
+  px) 
+  img_name="$COSH_APP_PREFIX/trafficproxy"
+  vol_args="`setvol /dev/dri /dev/snd /tmp/.X11-unix /run/dbus/system_bus_socket`"
+  env_args="-e"
+  net_args="--network-alias=squid.cosh --network-alias=exporter.cosh --network cdi_open"
+  cmd_args="squid -YC"
+  ;;
+
+
+
+
+  esac
+}

@@ -1,5 +1,18 @@
 #!/bin/sh
 cdi_up(){
-  for i in ${cdi_core:-${CDI_RIND:+dom1} dom0} ${@:+cdi_opx}; do cdi_launch $i; done
-  test ! -z "$1" && docker network connect --alias proxy.cosh cdi_system cdi_opx
+  cdi_network_launch
+  for i in ${CDI_RIND:+dom1} ${CDI_CORE:-dom0} ${@:+$@ px}; do 
+    pod_launch $i; 
+    test $i = px && network_connect 10.11.11.11 cdi_system px
+  done
+
+  if test ! -z "$CDI_ROOTLESS"; then 
+    test ! -f /run/user/1000/docker.pid && cdi_init_rootless;
+  else 
+    test ! -z "$CDI_WITH_PA" && {
+      pod_pkg_init ${CDI_CORE} pulseaudio
+      pod_pkg_init ${CDI_CORE} docker.io
+    }
+  fi
+  ${CDI_RIND:+rind_init dom1}
 }

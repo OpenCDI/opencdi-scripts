@@ -1,5 +1,4 @@
 #!/bin/sh
 cdi_down(){
-  for i in ${cdi_core:-dom0} ${@:+$@ cdi_opx}; do cdi_remove $i; done  
-  sleep 1;
+  for i in $@ ${CDI_CORE:-dom0}; do pod_remove $i & done  
 }

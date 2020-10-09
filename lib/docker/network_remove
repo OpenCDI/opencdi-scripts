@@ -1,0 +1,4 @@
+#!/bin/sh
+network_remove(){
+  pudo docker network remove ${1:?@cdictl/docker/atomic_remove_nw: argument needed!}
+}

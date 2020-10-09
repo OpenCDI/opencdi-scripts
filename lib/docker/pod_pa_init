@@ -1,0 +1,5 @@
+#!/bin/sh
+pod_pa_init(){
+  pudo docker exec -dt -u root ${1:-$CDI_CORE} chown ${CDI_USER:-duser} /home/${CDI_USER:-duser}/.pulse_socket
+  pudo docker exec -dt -u ${CDI_USER:-duser} ${1:-$CDI_CORE} pulseaudio --start
+}

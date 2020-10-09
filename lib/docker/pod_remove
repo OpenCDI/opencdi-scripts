@@ -1,0 +1,4 @@
+#!/bin/sh
+pod_remove(){
+  pudo docker stop $1 &
+}

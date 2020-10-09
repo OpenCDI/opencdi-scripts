@@ -1,0 +1,10 @@
+#!/bin/sh
+cdi_type_select(){
+  case ${1:?@cdictl/cdi_type_select: argument needed!} in 
+    host) CDI_ROOTLESS=; CDI_RIND= ;; 
+    rootless) CDI_ROOTLESS=1 ;; 
+    dind) throw not supported now;; 
+    rind) CDI_RIND=1;; 
+    rinr) CDI_ROOTLESS=1; CDI_RIND=1;;
+  esac
+}

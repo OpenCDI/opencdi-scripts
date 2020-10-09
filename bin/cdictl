@@ -2,50 +2,104 @@
 
 cdictl(){
 
-loadmod(){
-  require @cdictl
-}
-loadenv(){
-  pa_socket=$HOME/.pulse_socket
-  #core=
-}
+  loadmod(){
+    require @cdictl 
+    require @cosh
+    require grep docker
 
-parseargs(){
-  case ${1:?argument needed!} in
-    up) #[con_desc]
-    #launch cdi stack
-      shift;
-      #display_init; 
-      cdi_network_launch
-      cdi_up $@;
-      pkg_init ${core:-dom0} pulseaudio
-      pkg_init ${core:-dom0} docker.io
-      #pkg_init fox pulseaudio
-      ${FROM_XINIT:+pa_init} ;;
-    down) 
-    #stop cdi stack
-      shift
-      pkill -9 X; execute(){ cdi_down $@ ; } ;;
-    *) showhelp ;;
-  esac
-}
+    case $CDI_PLATFORM in
+      ""|docker) require +docker;;
+      lxc|lxd) throw LXC not supported now;;
+      *) throw cdictl: unknown platform $CDI_PLATFORM ;;
+    esac
+    cdi_network_launch
+  }
 
-execute(){
-  exec docker exec -i ${FROM_XINIT:+-t} -u duser \
-    -e SHELL=/bin/bash \
-    -e DISPLAY=:0 \
-    -e LANG=$LANG \
-    -e LC_ALL=$LANG \
-    -e XMODIFIERS=@im=ibus \
-    -e GTK_IM_MODULE=ibus \
-    -e QT_IM_MODULE=ibus \
-    -e XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR \
-    ${core:-dom0} ${core_session:-mate-session}
-#    -e http_proxy=http://squid.cosh:3128 \
-#    -e https_proxy=http://squid.cosh:3128 \
+  loadenv(){
+    : ${CDI_USER:=duser}
+    test ! -z "$CDI_ROOTLESS" && {
+      PATH=$HOME/bin:$PATH:/sbin
+      export DOCKER_HOST=unix:///run/user/1000/docker.sock
+    }
 
-#  docker stop ${core:-dom0}
-}
+    CDI_PREFIX=${CDI_PREFIX:-"cdi_"}
+    COSH_APP_PREFIX="coshapp"
+
+    #CDI_DOCKER_ADMIN=
+
+    #CDI_PLATFORM=
+
+    # specify CDI_CORE_IMG if you need to set own dom0 image
+    CDI_CORE_IMG=${CDI_CORE_IMG:-admin}
+
+    # specify CDI_CORE if you need to set own dom0 alternative container
+    CDI_CORE=${CDI_CORE:-dom0}
+
+    # specify CDI_PA_SOCKET if a bind-mounted pulseaudio socket needed
+    CDI_PA_SOCKET=$HOME/.pulse_socket
+
+    # specify X input method for dom0 if you need
+    CDI_XIM=ibus
+
+    # if CDI_DISPLAY not set, set CDI_DISPLAY to
+    : ${CDI_DISPLAY:=:0}
+
+    # if $CDI_RIND bit set to true, CDI_RIND_HOST used
+    CDI_RIND_HOST=${CDI_RIND:+"unix:///run/user/1000/cosh/docker.sock"}
+
+    sanitize "$CDI_CORE" "$CDI_CORE_SESSION" "$CDI_USER" "$CDI_RIND_HOST" "$CDI_PREFIX" 
+
+  }
+
+  #SHELIB_OPTIONS
+  parseopts(){
+    case $1 in
+      --display|-D) #DISPLAY
+      ##set display for the session
+        CDI_DISPLAY=${2:?--display option needs an argument!}; 
+        shiftstack 2 $@ ;;
+      -p|--platform) #<docker|lxc> ##MISC EXPERIMENTAL
+        cdi_platform_select $2
+        shiftstack 2 $@;;
+      --type|-T) #<type>  ##MISC EXPERIMENTAL
+      ##set cdi stack type <host|rootless|dind|rind|rinr>
+        cdi_type_select $2; shiftstack 2 $@ ;;
+      -*) throw unknown option $1;;
+    esac
+  }
+  #SHELIB_OPTIONS
+
+  #SHELIB_SUBCOMMANDS
+  parseargs(){
+    case ${1:?argument needed!} in
+      up) #[pods]
+      ##launch cdi stack
+        shift; cdi_up $@;;
+      rind-init) #[container] ##MISC
+      ##launch rootlesskit inside a admin-rootless
+        cdi_rind_init ${2:-dom1} ;;
+      down) #[pods]
+      ##teardown cdi stack
+        shift; ${FROM_XINIT:+pkill -15 X}; cdi_down $@; exit;;
+      list|ls) 
+      ##list cdi stack
+        shift; list_container $@; exit;;
+      help) #[--detail]
+      ##show this help
+        showhelp $2; exit ;;
+      *) showhelp --detail; throw unknown subcommand -l ;;
+    esac
+  }
+  #SHELIB_SUBCOMMANDS
+
+  execute(){
+    sanitize "$CDI_XIM" \
+      "$CDI_DISPLAY" \
+      "$XDG_RUNTIME_DIR" \
+      "$CDI_HTTP_PROXY" \
+      "$CDI_HTTPS_PROXY"
+    cdi_session_exec
+  }
 
 }
 

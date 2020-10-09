@@ -1,0 +1,5 @@
+#!/bin/sh
+# permitted user's do
+pudo(){
+  ${EXEC:+exec} ${SUDOING:+sudo -u ${CDI_DOCKER_ADMIN:-root}} $@
+}

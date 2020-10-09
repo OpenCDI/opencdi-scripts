@@ -1,0 +1,5 @@
+#!/bin/sh
+host_pa_init(){
+  pactl load-module module-native-protocol-unix auth-anonymous=1 socket=${CDI_PA_SOCKET:?CDI_PA_SOCKET path not defined!}
+  pulseaudio --start
+}

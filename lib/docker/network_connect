@@ -1,0 +1,8 @@
+#!/bin/sh
+network_connect(){
+  pudo docker network connect \
+    --ip ${1:?@cdictl/docker/network_connect: ip4 address not specified!} \
+    --alias ${3:?@cdictl/docker/network_connect: container name for attaching not specified!}.cosh \
+    ${2:?@cdictl/docker/network_connect: network if for attaching not specified!} \
+    ${3:?@cdictl/docker/network_connect: container name for attaching not specified!}
+}
