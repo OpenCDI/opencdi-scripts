@@ -1,0 +1,11 @@
+#!/bin/sh -x
+xhost +local:0
+
+export core=${1:-mate}
+SUDOING=1
+
+CDI_DISPLAY=${DISPLAY:?DISPLAY not set}
+
+export CDI_RIND CDI_DISPLAY
+
+cdictl up
