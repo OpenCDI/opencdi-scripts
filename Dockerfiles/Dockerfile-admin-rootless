@@ -1,0 +1,31 @@
+FROM coshapp/admin:debian-l10n-ja-10.5
+
+USER root
+RUN echo '127.0.0.2 dom0.cosh' | tee -a /etc/hosts
+RUN apt-get install -y vim git
+RUN cp -v /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+RUN mkdir -vp /run/user/1000
+RUN chown 1000:1000 /run/user/1000
+RUN apt-get remove -y docker.io
+
+USER duser 
+WORKDIR /home/duser
+
+RUN mkdir -p local/shef
+WORKDIR /home/duser/local/shef
+RUN git config --global user.name saru
+RUN git config --global user.email okadas@dev.sysnk.net
+
+
+USER root
+RUN apt-get install -y curl uidmap
+USER duser
+RUN curl -sL https://get.docker.com/rootless | sh
+ADD . /home/duser/.shef
+ENV PATH=/home/duser/.shef/bin:$PATH
+ENV XDG_RUNTIME_DIR=/run/user/1000
+ENV PATH=/home/duser/bin:$PATH:/sbin
+ENV DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
+RUN mkdir $HOME/.local
+
+CMD /bin/sh
