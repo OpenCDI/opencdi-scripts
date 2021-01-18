@@ -1,21 +1,21 @@
-OpenCDI tools for containerized VDI operators/developers (alpha release)
+#### OpenCDI tools for containerized VDI operators/developers (alpha release)
 
-OpenCDI is a light-weight VDI implementation using Linux containers.
+**OpenCDI** is a light-weight VDI implementation using Linux containers.
 This project aims to be a simple, loose coupled, open and vendor neutral CLI interfaces for CDI users and Linux container (docker, podman, etc.) users.
 
 # Features
 
 * cdictl command and @opencdi shelib module for cdi control interface
-* cosh API integration
+* cosh API integration and public (and easly modifiable) coshapp docker images 
 * Xsession scripts (cdi-launch\*) for xinit and login sessions
 
-At now, outbound connection not supported but you can integrate the feature with some of VNC (or Web-based VNC) implementations. 
-(XForwarding not recommended)
+At now, inbound connection not supported but you can integrate some of VNC (or Web-based VNC) implementations for that.
+XForwarding over network will be disruptive experience for users.
 
 # Supported platforms
 
 * amd64 archtecture (at now)
-* GNU/Linux or its derivetives (Linux Namespaces and Docker support needed)
+* GNU/Linux or its derivatives (Linux Namespaces and Docker support needed)
 * posix mode of bash, dash, /bin/sh of busybox and some of other posix compatible shells
 * Docker (podman, lxc/lxd or [orchestrator](https://github.com/tanban-oss/opencdi/WHY_NOT_ORCHESTRATOR_NOW.md) not supported now.)
 * At now, shell scripting runtime based on shelib 0.5+ (because of PoC convinience)
@@ -24,8 +24,8 @@ At now, outbound connection not supported but you can integrate the feature with
 
 * bash, dash, busybox sh or other POSIX compatible /bin/sh
 * Linux kernel >= 4.9 (namespace support required for rootless modes)
-* shelib >= v0.5.0
-* cosh >= v0.1.0
+* [shelib](https://github.com/okadash/shelib) >= v0.5.0
+* [cosh]((https://github.com/okadash/cosh) >= v0.1.0
 * docker >= 19.01.0 (for non-rootless mode)
 * docker-rootless (for rootless mode, required in $HOME/bin)
 
@@ -108,7 +108,7 @@ sudo systemctl restart lightdm
 
 5. Select `CDI-Mate` session for the login session, input password and login!
 
-OpenCDI has several deployment patterns (plain dom0, rind, plain rootless, and so on.). 
+OpenCDI has several deployment patterns (plain dom0 (dangerous), rind, plain rootless, and so on.). 
 Choose most beneficial mode for your use cases.
 You can also write a new launcher and corresponding desktop entry to do that.
 
@@ -117,7 +117,7 @@ You can also write a new launcher and corresponding desktop entry to do that.
 
 * This package is alpha release. (buggy)
 * If you want to use rootless mode for OpenCDI, check your DOCKER_HOST for valid (or ideal) action inside the administrative container (dom0). 
-* If you are interesting to report bugs and make any improvement, see CONTRIBUTING.md
+* If you are interested in reporting bugs or make any improvement to the project, see CONTRIBUTING.md
 
 ## Support
 
