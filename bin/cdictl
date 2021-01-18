@@ -3,7 +3,7 @@
 cdictl(){
 
   loadmod(){
-    require @opencdi
+    require @cdictl
     require @cosh
     require grep docker
 
@@ -19,7 +19,7 @@ cdictl(){
     : ${CDI_USER:=duser}
     test ! -z "$CDI_ROOTLESS" && {
       PATH=$HOME/bin:$PATH:/sbin
-      export DOCKER_HOST=unix:///run/user/1000/docker.sock
+      export DOCKER_HOST=unix:///run/user/$(id -u)/docker.sock
     }
 
     CDI_PREFIX=${CDI_PREFIX:-"cdi_"}
@@ -30,7 +30,7 @@ cdictl(){
     #CDI_PLATFORM=
 
     # specify CDI_CORE_IMG if you need to set own dom0 image
-    CDI_CORE_IMG=${CDI_CORE_IMG:-admin}
+    CDI_CORE_IMG=${CDI_CORE_IMG:-coshapp/admin}
 
     # specify CDI_CORE if you need to set own dom0 alternative container
     CDI_CORE=${CDI_CORE:-dom0}
