@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name[en_GB]=CDI Mate Rootless
+Name[ja]=CDI Mate Rootless
+Name=CDI Mate Rootless
+Comment[en_GB]=This session logs you into CDI Mate with rootless docker
+Comment[ja]=このセッションで CDI Mate にログインします (rootless)
+Comment=This session logs you into CDI
+Exec=/usr/local/bin/cdi-launch-mate-rootless
+TryExec=/usr/local/bin/cdi-launch-mate-rootless
+Type=Application
+DesktopNames=CDI-Mate;CDI;

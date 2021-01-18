@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name[en_GB]=CDI Mate on arch testing
+Name[ja]=CDI Mate on arch testing
+Name=CDI Mate on archlinux (test)
+Comment[en_GB]=This session logs you into CDI Mate 
+Comment[ja]=このセッションで CDI Mate にログインします
+Comment=This session logs you into CDI
+Exec=/usr/local/bin/cdi-launch-archlinux
+TryExec=/usr/local/bin/cdi-launch-archlinux
+Type=Xsession
+DesktopNames=CDI-Mate;CDI;

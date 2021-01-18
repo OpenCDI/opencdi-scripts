@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name[en_GB]=CDI Gnome Testing
+Name[ja]=CDI Gnome Testing
+Name=CDI Gnome Testing
+Comment[en_GB]=This session logs you into CDI Gnome (unstable)
+Comment[ja]=このセッションで CDI Gnome にログインします(unstable)
+Comment=This session logs you into CDI
+Exec=/usr/local/bin/cdi-launch-gnome
+TryExec=/usr/local/bin/cdi-launch-gnome
+Type=Application
+DesktopNames=CDI-Gnome;CDI;
