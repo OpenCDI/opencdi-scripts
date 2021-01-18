@@ -3,7 +3,7 @@
 cdictl(){
 
   loadmod(){
-    require @cdictl 
+    require @opencdi
     require @cosh
     require grep docker
 

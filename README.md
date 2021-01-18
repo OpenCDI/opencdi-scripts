@@ -1,39 +1,43 @@
-OpenCDI tools for developpers
-
-# About
+OpenCDI tools for containerized VDI developpers (alpha release)
 
 OpenCDI is a light-weight VDI implementation using Linux containers.
-This package is composed of three parts:
+This project aims to be a simple, loose coupled, open and vendor neutral CLI interfaces for CDI users and Linux container (docker, podman, etc.) users.
+
+# Features
 
 * cdictl and @opencdi shelib module for cdi control interface
+* cosh API integration
 * Xsession scripts (cdi-launch\*) for xinit and login sessions
-* Dockerfiles for admin/rootless images for CDI users/operators
+
+At now, outbound connection not supported but you can integrate the feature with some of VNC (or Web-based VNC) implementations. 
+(XForwarding not recommended)
 
 # Requirements
 
-bash, ash, dash, busybox sh or other POSIX compatible /bin/sh
-Linux kernel >= 4.9 (namespace support required for rootless modes)
-shelib >= v0.5.0
-docker >= 19.01.0
-docker-rootless (for rootless mode, required in $HOME/bin)
+* bash, dash, busybox sh or other POSIX compatible /bin/sh
+* Linux kernel >= 4.9 (namespace support required for rootless modes)
+* shelib >= v0.5.0
+* cosh >= v0.1.0
+* docker >= 19.01.0 (for non-rootless mode)
+* docker-rootless (for rootless mode, required in $HOME/bin)
 
 # Install
 
 ```
-shef install https://github.com/opencdi
+shef install https://github.com/tanban-oss/opencdi
 ```
 
 For the reduce of the time of CDI startup, pull coshapp image before the first invokation of cdictl.
 
 ```
-for i in admin firefox thunderbird libreoffice; do
-  docker pull coshapp/$i:debian-10.5
+for i in admin rootless firefox thunderbird libreoffice; do
+  docker pull coshapp/$i:debian-10.7
 done
 ```
 
 # Quick start
 
-## (1) for xinit
+## (1) xinit
 
 ``` ~/.xinitrc
 export FROM_XINIT=1
@@ -41,9 +45,17 @@ export SUDOING=1
 cdictl up 
 ```
 
-Execute `startx` in multi-user mode.
+Execute `startx` as an user in wheel/sudo group.
 
-## (2) LightDM desktop manager example
+## (2) xinit with rootless docker
+
+``` ~/.xinitrc
+export FROM_XINIT=1
+export CDI_ROOTLESS=1
+cdictl up 
+```
+
+## (3) LightDM desktop manager example
 
 1. add xsession desktop file:
 
@@ -66,11 +78,10 @@ DesktopNames=CDI-Mate;CDI;
 
 ## Bugs
 
-If some misterious messages occur, please make issue or fix it. See CONTRIBUTING.md
+This package is alpha release. 
+If you are interesting to report bugs and make any improvement, see CONTRIBUTING.md
 
 
 ## Support
 
-Reports and questions are welcomed in Github issues or from contact below:
-
-opencdi@lab.sysnk.net
+opencdi[at]uillos.org
