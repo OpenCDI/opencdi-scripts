@@ -25,7 +25,7 @@ XForwarding over network will be disruptive experience for users.
 * bash, dash, busybox sh or other POSIX compatible /bin/sh
 * Linux kernel >= 4.9 (namespace support required for rootless modes)
 * [shelib](https://github.com/okadash/shelib) >= v0.5.0
-* [cosh]((https://github.com/okadash/cosh) >= v0.1.0
+* [cosh](https://github.com/okadash/cosh) >= v0.1.0
 * docker >= 19.01.0 (for non-rootless mode)
 * docker-rootless (for rootless mode, required in $HOME/bin)
 
