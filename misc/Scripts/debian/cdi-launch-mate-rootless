@@ -3,6 +3,7 @@ xhost +local:0
 
 export CDI_ROOTLESS=1
 export CDI_DISPLAY=:0
+export DOCKER_HOST=${DOCKER_HOST:-unix:///run/user/1000/docker.sock}
 PATH=$HOME/bin:$PATH:/sbin
 
 cdictl up
