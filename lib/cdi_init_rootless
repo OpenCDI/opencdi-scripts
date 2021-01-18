@@ -2,5 +2,5 @@
 # initialize rootlesskit for CDI
 cdi_init_rootless(){
   type -f $HOME/bin/dockerd-rootless.sh || throw rootless dockerd not found
-  $HOME/bin/dockerd-rootless.sh --experimental --storage-driver=vfs
+  $HOME/bin/dockerd-rootless.sh --experimental --storage-driver=btrfs
 }

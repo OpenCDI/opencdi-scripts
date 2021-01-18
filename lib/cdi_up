@@ -6,9 +6,7 @@ cdi_up(){
     test $i = px && network_connect 10.11.11.11 cdi_system px
   done
 
-  if test ! -z "$CDI_ROOTLESS"; then 
-    test ! -f /run/user/1000/docker.pid && cdi_init_rootless;
-  else 
+  if test -z "$CDI_ROOTLESS"; then 
     test ! -z "$CDI_WITH_PA" && {
       pod_pkg_init ${CDI_CORE} pulseaudio
       pod_pkg_init ${CDI_CORE} docker.io
