@@ -30,8 +30,8 @@ opencdi(){
     #CDI_PLATFORM=
 
     # specify CDI_CORE_IMG if you need to set own dom0 image
+    test ! -z "${CDI_ROOTLESS}" && CDI_CORE_IMG=${CDI_CORE_IMG:-coshapp/rootless}
     CDI_CORE_IMG=${CDI_CORE_IMG:-coshapp/admin}
-    test ! -z "${CDI_ROOTLESS}" && CDI_CORE_IMG=coshapp/rootless
 
     # specify CDI_CORE if you need to set own dom0 alternative container
     CDI_CORE=${CDI_CORE:-dom0}
