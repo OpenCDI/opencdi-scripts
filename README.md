@@ -2,11 +2,11 @@
 
 # About
 
-**OpenCDI** is a light-weight VDI implementation using Linux containers.
-This project aims to be a simple, loose coupled, open and vendor neutral CLI interfaces for CDI users and Linux container (docker, podman, etc.) users.
-This tool (PoC) is built on top of shelib runtime and userspace containerized over almost all of the desktop experience lifetime. 
+**OpenCDI** is a light-weight and open VDI toolset using Linux containers.
+This project aims to be a simple, loose coupled, open and vendor neutral CLI interfaces for CDI users and Linux container users(docker, podman, etc.).
+This tool (PoC) is built on top of [shelib](https://github.com/okadash/shelib) runtime (version 5+) and userspaces can be containerized over almost all of your Linux desktop experience lifetime. 
 
-You can be logged in with an user inside the administrative container.
+You can be logged in with an user inside the administrative container or non-administrative container.
 
 There are several features supporting userspace transition of the graphical environment, from outside to inside container:
 
@@ -22,7 +22,7 @@ At now, inbound network connection not supported. But you can integrate some of 
 * GNU/Linux or its derivatives (Linux Namespaces and Docker support needed)
 * posix mode of bash, dash, /bin/sh of busybox and some of other posix compatible shells
 * Docker (podman, lxc/lxd or [orchestrators](https://github.com/tanban-oss/opencdi/WHY_NO_ORCHESTRATOR_NOW.md) not supported now.)
-* shell scripting runtime based on shelib 0.5+ (because of PoC convinience)
+* shell scripting runtime based on shelib 0.5+ (because of the [auther](https://github.com/okadash)'s PoC convinience)
 
 # Requirements
 
@@ -31,18 +31,18 @@ At now, inbound network connection not supported. But you can integrate some of 
 * [shelib](https://github.com/okadash/shelib) >= v0.5.0
 * [cosh](https://github.com/okadash/cosh) >= v0.1.0
 * docker >= 19.01.0 (for non-rootless mode)
-* docker-rootless (for rootless mode, required in $HOME/bin)
+* dockerd-rootless (for rootless mode. Read to met the [prerequisity](https://docs.docker.com/engine/security/rootless/#prerequisites).)
 
 # Install
 
 ```
-shef install https://github.com/tanban-oss/opencdi
+shef install https://github.com/opencdi/opencdi-scripts
 ```
 
 For the reduce of the time of CDI startup, pull coshapp image before the first invokation of cdictl.
 
 ```
-for i in admin rootless firefox thunderbird libreoffice; do
+for i in core admin rootless firefox thunderbird libreoffice; do
   docker pull coshapp/$i:debian-10.7
 done
 ```
@@ -60,6 +60,8 @@ cdictl up
 ```
 
 Execute `startx` as an user in wheel/sudo group.
+
+Because of docker's design on [permission control](https://docs.docker.com/engine/security/#docker-daemon-attack-surface), we recommend to use docker with sudo and [userns-remap](https://docs.docker.com/engine/security/userns-remap/), or use [rootless](https://docs.docker.com/engine/security/rootless/).
 
 ## (2) xinit with rootless docker
 
