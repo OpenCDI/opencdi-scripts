@@ -1,24 +1,28 @@
-#### OpenCDI tools for containerized VDI operators/developers (alpha release)
+### OpenCDI tools for containerized VDI operators/developers (alpha release)
+
+# About
 
 **OpenCDI** is a light-weight VDI implementation using Linux containers.
 This project aims to be a simple, loose coupled, open and vendor neutral CLI interfaces for CDI users and Linux container (docker, podman, etc.) users.
+This tool (PoC) is built on top of shelib runtime and userspace containerized over almost all of the desktop experience lifetime. 
 
-# Features
+You can be logged in with an user inside the administrative container.
 
-* cdictl command and @opencdi shelib module for cdi control interface
+There are several features supporting userspace transition of the graphical environment, from outside to inside container:
+
+* cdictl CLI and @opencdi shelib module for cdi control interface
 * cosh API integration and public (and easly modifiable) coshapp docker images 
-* Xsession scripts (cdi-launch\*) for xinit and login sessions
+* Xsession scripts (cdi-launch\*) and desktop entry files (\*.desktop) for xinit and display managers
 
-At now, inbound connection not supported but you can integrate some of VNC (or Web-based VNC) implementations for that.
-XForwarding over network will be disruptive experience for users.
+At now, inbound network connection not supported. But you can integrate some of VNC (or Web-based VNC) implementations for that.
 
 # Supported platforms
 
-* amd64 archtecture (at now)
+* amd64 archtecture (currently testing)
 * GNU/Linux or its derivatives (Linux Namespaces and Docker support needed)
 * posix mode of bash, dash, /bin/sh of busybox and some of other posix compatible shells
-* Docker (podman, lxc/lxd or [orchestrator](https://github.com/tanban-oss/opencdi/WHY_NOT_ORCHESTRATOR_NOW.md) not supported now.)
-* At now, shell scripting runtime based on shelib 0.5+ (because of PoC convinience)
+* Docker (podman, lxc/lxd or [orchestrators](https://github.com/tanban-oss/opencdi/WHY_NO_ORCHESTRATOR_NOW.md) not supported now.)
+* shell scripting runtime based on shelib 0.5+ (because of PoC convinience)
 
 # Requirements
 
@@ -72,38 +76,30 @@ cdictl up
 1. check shelib and opencdi installation
 
 ```
-
 $ cook -V
 shelib-0.5.0 (@core/cook)
 $ opencdi help --short
 opencdi-0.0.1 (@opencdi/opencdi)
-
 ```
 
 2. install the OpenCDI launcher and xsession desktop entry
 
 ```
-
-sudo install -v -m 755 misc/Scripts/debian/cdi-launch\* /usr/local/bin/
-sudo install -v -m 644 misc/xsession/debian/\* /usr/share/xsessions/
-
+$ sudo install -v -m 755 misc/Scripts/debian/cdi-launch\* /usr/local/bin/
+$ sudo install -v -m 644 misc/xsession/debian/\* /usr/share/xsessions/
 ```
 
 3. make symbolic links for OpenCDI related executables (if you don't install shelib globally)
 
 ```
-
-for i in opencdi cdictl cook; do sudo ln -sv $(readlink $i) /usr/local/bin/; done
-sudo ln -sv /absolute_path_to_repo/misc/Scripts/debian/cdi-\* /usr/local/bin/
-
+$ for i in opencdi cdictl cook; do sudo ln -sv $(readlink $i) /usr/local/bin/; done
+$ sudo ln -sv /absolute_path_to_repo/misc/Scripts/debian/cdi-\* /usr/local/bin/
 ```
 
 4. Restart lightdm or reboot
 
 ```
-
-sudo systemctl restart lightdm
-
+$ sudo systemctl restart lightdm
 ```
 
 5. Select `CDI-Mate` session for the login session, input password and login!
