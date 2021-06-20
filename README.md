@@ -5,7 +5,7 @@
 We are sorry that this repo has been `private` until June 20 2021.
 This is public now, but archive for several reasons.
 
-* shelib runtime is not well-maintained at now.
+* [shelib](https://github.com/shimmortal/shelib) runtime is not well-maintained at now.
 * We will rewrite cdictl and cosh (maybe it will be written in the other language)
 
 # About
