@@ -7,7 +7,6 @@ This is public now, but archive for several reasons.
 
 * shelib runtime is not well-maintained at now.
 * We will rewrite cdictl and cosh (maybe it will be written in the other language)
-* 
 
 # About
 
@@ -123,7 +122,6 @@ You can also write a new launcher and corresponding desktop entry to do that.
 
 * This package is alpha release. (buggy)
 * If you want to use rootless mode for OpenCDI, check your DOCKER_HOST for valid (or ideal) action inside the administrative container (dom0). 
-* If you are interested in reporting bugs or make any improvement to the project, see CONTRIBUTING.md
 
 ## Support
 
