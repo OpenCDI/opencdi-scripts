@@ -1,10 +1,19 @@
 ### OpenCDI tools for containerized VDI operators/developers (alpha release)
 
+# SUGGESTION for watchers
+
+We are sorry that this repo has been `private` until June 20 2021.
+This is public now, but archive for several reasons.
+
+* shelib runtime is not well-maintained at now.
+* We will rewrite cdictl and cosh (maybe it will be written in the other language)
+* 
+
 # About
 
 **OpenCDI** is a light-weight and open VDI toolset using Linux containers.
 This project aims to be a simple, loose coupled, open and vendor neutral CLI interfaces for CDI users and Linux container users(docker, podman, etc.).
-This tool (PoC) is built on top of [shelib](https://github.com/okadash/shelib) runtime (version 5+) and userspaces can be containerized over almost all of your Linux desktop experience lifetime. 
+This tool (PoC) is built on top of [shelib](https://github.com/shimmortal/shelib) runtime (version 5+) and userspaces can be containerized over almost all of your Linux desktop experience lifetime. 
 
 You can be logged in with an user inside the administrative container or non-administrative container.
 
@@ -21,17 +30,16 @@ At now, inbound network connection not supported. But you can integrate some of 
 * amd64 archtecture (currently testing)
 * GNU/Linux or its derivatives (Linux Namespaces and Docker support needed)
 * posix mode of bash, dash, /bin/sh of busybox and some of other posix compatible shells
-* Docker (podman, lxc/lxd or [orchestrators](https://github.com/tanban-oss/opencdi/WHY_NO_ORCHESTRATOR_NOW.md) not supported now.)
-* shell scripting runtime based on shelib 0.5+ (because of the [auther](https://github.com/okadash)'s PoC convinience)
+* Docker (podman, lxc/lxd or orchestrators not supported now.)
+* shell scripting runtime based on shelib 0.5+ (because of the auther's PoC convinience)
 
 # Requirements
 
 * bash, dash, busybox sh or other POSIX compatible /bin/sh
 * Linux kernel >= 4.9 (namespace support required for rootless modes)
-* [shelib](https://github.com/okadash/shelib) >= v0.5.0
-* [cosh](https://github.com/okadash/cosh) >= v0.1.0
-* docker >= 19.01.0 (for non-rootless mode)
-* dockerd-rootless (for rootless mode. Read to met the [prerequisity](https://docs.docker.com/engine/security/rootless/#prerequisites).)
+* [shelib](https://github.com/shimmortal/shelib) >= v0.5.0
+* [cosh](https://github.com/shimmortal/cosh) >= v0.1.0
+* docker >= 19.01.0  (for rootless mode. Read to met the [prerequisity](https://docs.docker.com/engine/security/rootless/#prerequisites).)
 
 # Install
 
@@ -42,8 +50,8 @@ shef install https://github.com/opencdi/opencdi-scripts
 For the reduce of the time of CDI startup, pull coshapp image before the first invokation of cdictl.
 
 ```
-for i in core admin rootless firefox thunderbird libreoffice; do
-  docker pull coshapp/$i:debian-10.7
+for i in core admin firefox thunderbird libreoffice; do
+  docker pull coshapp/$i:debian-10.9
 done
 ```
 
